@@ -1,5 +1,6 @@
 import React from 'react';
-import {TextInputProps} from 'react-native';
+import {Text, TextInputProps} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { Container, TextInput, Icon } from './styles';
 
@@ -17,6 +18,8 @@ const Input: React.FC<InputProps> = ({name, icon, ...rest}) => (
       placeholderTextColor="#0a0805"
       {...rest}
     />
+
+    <TouchableOpacity><Text>Esqueci minha Senha</Text></TouchableOpacity>
   </Container>
 );
 
