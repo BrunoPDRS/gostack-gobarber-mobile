@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, View, KeyboardAvoidingView, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import {Form} from '@unform/mobile'
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -39,11 +40,12 @@ const SignIn: React.FC = () => {
               <Title>Faça seu logon</Title>
             </View>
 
-            <Input name="email" icon="mail" placeholder="E-mail" />
-            <Input name="password" icon="lock" placeholder="Senha" />
+            <Form>
+              <Input name="email" icon="mail" placeholder="E-mail" />
+              <Input name="password" icon="lock" placeholder="Senha" />
 
-            <Button onPress={() => {console.log('oi')}}>Entrar</Button>
-
+              <Button onPress={() => {console.log('oi')}}>Entrar</Button>
+            </Form>
             <ForgotPassword onPress={() => {}}>
               <ForgotPasswordText>Esqueci minha senha</ForgotPasswordText>
             </ForgotPassword>
