@@ -1,6 +1,6 @@
-import React from 'react';
-import {Text, TextInputProps} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useEffect, useRef } from 'react';
+import { TextInputProps } from 'react-native';
+import { useField } from '@unform/core';
 
 import { Container, TextInput, Icon } from './styles';
 
@@ -9,18 +9,35 @@ interface InputProps extends TextInputProps {
   icon: string;
 }
 
-const Input: React.FC<InputProps> = ({name, icon, ...rest}) => (
-  <Container>
-    <Icon name={icon} size={20} color="#666360" />
+interface InputValueReference {
+  value: string;
+}
 
-    <TextInput
-      keyboardAppearance="dark"
-      placeholderTextColor="#0a0805"
-      {...rest}
-    />
+const Input: React.FC<InputProps> = ({name, icon, ...rest}) => {
+  const {registerField, defaultValue = '', fieldName, error} = useField(name);
+  const inputValueRef = useRef<InputValueReference>({ value: defaultValue });
 
-    <TouchableOpacity><Text>Esqueci minha Senha</Text></TouchableOpacity>
-  </Container>
-);
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: inputValueRef.current,
+      path: 'value',
+    });
+  }, [fieldName, registerField]);
 
+  return (
+    <Container>
+      <Icon name={icon} size={20} color="#666360" />
+
+      <TextInput
+        keyboardAppearance="dark"
+        placeholderTextColor="#0a0805"
+        onChangeText={(value) => {
+          inputValueRef.current.value = value;
+        }}
+        {...rest}
+      />
+    </Container>
+  );
+}
 export default Input;
