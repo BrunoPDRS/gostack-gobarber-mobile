@@ -13,7 +13,11 @@ interface InputValueReference {
   value: string;
 }
 
-const Input: React.FC<InputProps> = ({name, icon, ...rest}) => {
+interface InputRef {
+  focus(): void;
+}
+
+const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = ({name, icon, ...rest}, ref) => {
   const inputElementRef = useRef<any>(null);
 
   const {registerField, defaultValue = '', fieldName, error} = useField(name);
