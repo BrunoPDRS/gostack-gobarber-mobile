@@ -75,8 +75,7 @@ const SignUp: React.FC = () => {
                 returnKeyType="send"
                 onSubmitEditing={ () => {formRef.current?.submitForm()} }
               />
-
-            <Button onPress={() => {formRef.current?.submitForm()}}>Cadastrar</Button>
+              <Button onPress={() => {formRef.current?.submitForm()}}>Cadastrar</Button>
             </Form>
           </Container>
         </ScrollView>
