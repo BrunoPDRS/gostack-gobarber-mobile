@@ -37,7 +37,6 @@ const SignUp: React.FC = () => {
         >
           <Container>
             <Image source={ logoImg } />
-
             <View>
               <Title>Crie sua conta</Title>
             </View>

@@ -42,7 +42,6 @@ const SignIn: React.FC = () => {
         >
           <Container>
             <Image source={ logoImg } />
-
             <View>
               <Title>Faça seu logon</Title>
             </View>
@@ -56,11 +55,8 @@ const SignIn: React.FC = () => {
                 icon="mail"
                 placeholder="E-mail"
                 returnKeyType="next"
-                onSubmitEditing={ () => {
-
-                } }
+                onSubmitEditing={ () => { } }
               />
-
               <Input
                 ref={ passwordInputRef }
                 name="password"
@@ -72,7 +68,6 @@ const SignIn: React.FC = () => {
                   formRef.current?.submitForm();
                 } }
               />
-
               <Button onPress={() => {
                 formRef.current?.submitForm();
               }}>Entrar</Button>
