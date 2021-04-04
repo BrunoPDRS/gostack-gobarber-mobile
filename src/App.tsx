@@ -4,15 +4,18 @@ import React from 'react';
 import {View, Text, StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 
+import AppProvider from './hooks';
 
 import Routes from './routes';
 
 const App: React.FC = () => (
   <NavigationContainer>
     <StatusBar barStyle="light-content" backgroundColor="#312e38"/>
-    <View style={{ backgroundColor: '#312e38', flex: 1,  justifyContent: 'center' }}>
-      <Routes />
-    </View>
+    <AppProvider>
+      <View style={{ backgroundColor: '#312e38', flex: 1,  justifyContent: 'center' }}>
+        <Routes />
+      </View>
+    </AppProvider>
   </NavigationContainer>
 );
 
