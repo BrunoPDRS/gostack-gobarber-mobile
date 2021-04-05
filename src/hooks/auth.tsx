@@ -1,7 +1,13 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import api from "../services/api";
+
+import api from '../services/api';
 
 interface AuthState {
   token: string;
@@ -21,28 +27,26 @@ interface AuthContextData {
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-export const AuthProvider: React.FC = ({ children }) => {
+const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>({} as AuthState);
 
   useEffect(() => {
-    const loadStoragedData = async (): Promise<void> => {
-      const [[,token], [,user]] = await AsyncStorage.multiGet([
-        "@GoBarber:token",
-        "@GoBarber:user",
+    async function loadStoragedData(): Promise<void> {
+      const [token, user] = await AsyncStorage.multiGet([
+        '@GoBarber:token',
+        '@GoBarber:user',
       ]);
 
-      if (token && user) {
-        setData({
-          token,
-          user: JSON.parse(user)
-        });
+      if (token[1] && user[1]) {
+        setData({ token: token[1], user: JSON.parse(user[1]) });
       }
     }
+
     loadStoragedData();
   }, []);
 
   const signIn = useCallback(async ({ email, password }) => {
-    const response = await api.post("sessions", {
+    const response = await api.post('sessions', {
       email,
       password,
     });
@@ -50,18 +54,15 @@ export const AuthProvider: React.FC = ({ children }) => {
     const { token, user } = response.data;
 
     await AsyncStorage.multiSet([
-      ["@GoBarber:token", token],
-      ["@GoBarber:user", JSON.stringify(user)],
+      ['@GoBarber:token', token],
+      ['@GoBarber:user', JSON.stringify(user)],
     ]);
 
     setData({ token, user });
   }, []);
 
   const signOut = useCallback(async () => {
-    await AsyncStorage.multiRemove([
-      "@GoBarber:token",
-      "@GoBarber:user",
-    ]);
+    await AsyncStorage.multiRemove(['@GoBarber:user', '@GoBarber:token']);
 
     setData({} as AuthState);
   }, []);
@@ -73,12 +74,14 @@ export const AuthProvider: React.FC = ({ children }) => {
   );
 };
 
-export const useAuth = (): AuthContextData => {
+function useAuth(): AuthContextData {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider!");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
 
   return context;
-};
+}
+
+export { AuthProvider, useAuth };

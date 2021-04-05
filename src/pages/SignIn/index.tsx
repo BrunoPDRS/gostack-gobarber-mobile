@@ -1,5 +1,13 @@
 import React, { useCallback, useRef } from 'react';
-import { Image, View, KeyboardAvoidingView, Platform, TextInput, Alert } from 'react-native';
+import {
+  Alert,
+  Image,
+  View,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+  TextInput,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
@@ -22,11 +30,10 @@ import {
   ForgotPassword,
   ForgotPasswordText,
   CreateAccountButton,
-  CreateAccountButtonText
+  CreateAccountButtonText,
 } from './styles';
-import { ScrollView } from 'react-native-gesture-handler';
 
-interface LoginData {
+interface SignInFormData {
   email: string;
   password: string;
 }
@@ -39,15 +46,15 @@ const SignIn: React.FC = () => {
   const { signIn } = useAuth();
 
   const handleSignIn = useCallback(
-    async (data: LoginData): Promise<void> => {
+    async (data: SignInFormData) => {
       try {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
           email: Yup.string()
-            .required("Email não preenchido")
-            .email("Digite um email válido"),
-          password: Yup.string().required("Senha não preenchida"),
+            .email('Digite um e-mail válido')
+            .required('E-mail obrigatório'),
+          password: Yup.string().required('Senha obrigatória'),
         });
 
         await schema.validate(data, {
@@ -69,7 +76,7 @@ const SignIn: React.FC = () => {
 
         Alert.alert(
           'Erro na autenticação',
-          'Ocorreu um erro ao fazer login, cheque as credenciais.'
+          'Ocorreu um erro ao fazer login, cheque as credenciais.',
         );
       }
     },
@@ -84,15 +91,15 @@ const SignIn: React.FC = () => {
         enabled
       >
         <ScrollView
-          contentContainerStyle={{ flex: 1}}
-          keyboardShouldPersistTaps='handled'
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ flex: 1 }}
         >
           <Container>
-            <Image source={ logoImg } />
+            <Image source={logoImg} />
+
             <View>
               <Title>Faça seu logon</Title>
             </View>
-
             <Form ref={formRef} onSubmit={handleSignIn}>
               <Input
                 autoCorrect={false}
@@ -102,23 +109,32 @@ const SignIn: React.FC = () => {
                 icon="mail"
                 placeholder="E-mail"
                 returnKeyType="next"
-                onSubmitEditing={ () => { } }
+                onSubmitEditing={() => {
+                  passwordInputRef.current?.focus();
+                }}
               />
+
               <Input
-                ref={ passwordInputRef }
+                ref={passwordInputRef}
                 name="password"
                 icon="lock"
                 placeholder="Senha"
                 secureTextEntry
                 returnKeyType="send"
-                onSubmitEditing={ () => {
+                onSubmitEditing={() => {
                   formRef.current?.submitForm();
-                } }
+                }}
               />
-              <Button onPress={() => {
-                formRef.current?.submitForm();
-              }}>Entrar</Button>
+
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm();
+                }}
+              >
+                Entrar
+              </Button>
             </Form>
+
             <ForgotPassword onPress={() => {}}>
               <ForgotPasswordText>Esqueci minha senha</ForgotPasswordText>
             </ForgotPassword>
@@ -127,13 +143,12 @@ const SignIn: React.FC = () => {
       </KeyboardAvoidingView>
 
       <CreateAccountButton onPress={() => navigation.navigate('SignUp')}>
-        <CreateAccountButtonText>
-          <Icon name="log-in" size={20} color="#ff9000" />
-          Criar uma conta
-        </CreateAccountButtonText>
+        <Icon name="log-in" size={20} color="#ff9000" />
+
+        <CreateAccountButtonText>Criar uma conta</CreateAccountButtonText>
       </CreateAccountButton>
     </>
-  )
+  );
 };
 
 export default SignIn;
